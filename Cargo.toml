@@ -6,6 +6,14 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "bevy_prototype_physics"
+path = "src/lib.rs"
+
+[[bin]]
+name = "bevy_prototype_physics_demo"
+path = "src/bin.rs"
+
 [dependencies]
 bevy ="0.5"
 
