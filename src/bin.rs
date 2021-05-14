@@ -3,9 +3,11 @@ use bevy_prototype_physics::kinematics::*;
 
 fn main() {
 	let velocity = Velocity {
-		val: Vec3::new(50.0, 0.0, 0.0),
+		val: Vec3::new(0.0, -50.0, 0.0),
     };
-    let acceleration = Acceleration { val: Vec3::ZERO };
+    let acceleration = Acceleration { 
+		val: Vec3::new(20.0, 0.0, 0.0)
+	};
 	
     App::build()
 	.add_plugins(DefaultPlugins)
@@ -25,10 +27,10 @@ fn setup_camera(mut commands: Commands) {
 
 fn spawn_test_object(
 	mut commands: Commands,
+	asset_server: Res<AssetServer>,
+	mut materials: ResMut<Assets<ColorMaterial>>,
 	velocity: Res<Velocity>,
 	acceleration: Res<Acceleration>,
-	asset_server: Res<AssetServer>,
-	mut materials: ResMut<Assets<ColorMaterial>>
 ) {
 	let texture_handle = asset_server.load("bevy.png");
 
