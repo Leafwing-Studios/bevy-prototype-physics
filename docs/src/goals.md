@@ -1,22 +1,25 @@
 # Goals
 
 - Kinematics
-    - Linear motion: position, velocity, acceleration
-    - Angular motion: angular position, angular velocity, angular acceleration
-    - Alternative solvers
+	- Linear motion: position, velocity, acceleration
+	- Angular motion: angular position, angular velocity, angular acceleration
+	- Alternative solvers
 - Force and torque
-    - Mass and force primitives
-    - Sensible API for constant and non-constant forces
-        - "Apply force `f` for time period `[t0, t1]`"
-    - Drag
+	- Mass and force primitives
+	- Sensible API for constant and non-constant forces
+		- "Apply force `f` for time period `[t0, t1]`"
+	- Drag
 - Rigid body
-    - Collisions
-        - Detection
-        - Constraint force resolution
-            - Statics
-        - Continuous detection
+	- Collisions
+		- Detection
+		- Constraint force resolution
+			- Statics
+		- Continuous detection
 - Friction
-    - Static vs. Dynamic
+	- Static vs. Dynamic
+- Ratchets for simple cases
+  - Pure "set velocity" case
+  - Psuedo "set velocity" that still does slight acceleration and deceleration
 - Common physics gizmos
-    - Springs
-    - Joints (these are just constraints)
+	- Springs
+	- Joints (these are just constraints)
