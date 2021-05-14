@@ -40,46 +40,35 @@ pub fn kinematics(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::{setup_camera, spawn_test_object};
-    use bevy::prelude::*;
 
-    fn setup_app(velocity: Velocity, acceleration: Acceleration) -> AppBuilder {
-        fn set_velocity(mut query: Query<&mut Velocity>, velocity: Res<Velocity>) {
-            for v in query.iter_mut() {
-                // v = velocity;
-            }
-        }
+    fn setup_world(velocity: Velocity, acceleration: Acceleration) -> (World, SystemStage, Entity) {
+        let mut world = World::default();
+        world.insert_resource(Time::default());
+        
+        let update_stage = SystemStage::parallel();
 
-        fn set_acceleration(mut query: Query<&mut Acceleration>, acceleration: Res<Acceleration>) {
-            for a in query.iter_mut() {
-                // a = acceleration;
-            }
-        }
-
-        *App::build()
-            .add_plugins(DefaultPlugins)
-            .add_plugin(KinematicsPlugin)
-            .insert_resource(Velocity { val: velocity })
-            .insert_resource(Acceleration { val: acceleration })
-            .add_startup_system(spawn_test_object.system())
-            .add_startup_system_to_stage(StartupStage::PostStartup, set_velocity.system())
-            .add_startup_system_to_stage(StartupStage::PostStartup, set_acceleration.system())
-            .add_system(setup_camera.system())
+        let entity_id = world.spawn()
+            .insert_bundle(SpriteBundle::default())
+            .insert_bundle((Velocity::from(velocity), Acceleration::from(acceleration)))
+            .id();
+        
+        (world, update_stage, entity_id)
     }
 
     #[test]
     fn linear_motion_test() {
-        setup_app(
+        let (mut world, mut update_stage, entity_id) = setup_world(
             Velocity {
                 val: Vec3::new(10.0, 0.0, 0.0),
             },
             Acceleration { val: Vec3::ZERO },
-        )
-        .run();
-    }
+        );
 
-    #[test]
-    fn constant_acceleration_test() {
-        setup_app().run();
+        update_stage.add_system(kinematics.system());
+        update_stage.run(&mut world);
+
+        // TODO: write a more precise test
+        assert!(world.get::<Velocity>(entity_id).unwrap().val.x < 0.0);
+        
     }
 }
