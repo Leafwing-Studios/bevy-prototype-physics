@@ -67,13 +67,39 @@ mod tests {
             Velocity {
                 val: Vec3::new(10.0, 0.0, 0.0),
             },
-            Acceleration { val: Vec3::ZERO },
+            Acceleration::default(),
         );
 
         update_stage.add_system(kinematics.system());
         update_stage.run(&mut world);
 
-        assert_eq!(world.get::<Velocity>(entity_id).unwrap().val.x, 10.0);
-        assert_eq!(world.get::<Transform>(entity_id).unwrap().translation.x, 10.0 * PHYSICS_TICK);
+        assert_eq!(
+            world.get::<Velocity>(entity_id).unwrap().val.x, 
+            10.0
+        );
+        assert_eq!(
+            world.get::<Transform>(entity_id).unwrap().translation.x, 
+            10.0 * PHYSICS_TICK
+        );
+    }
+
+    #[test]
+    fn linear_acceleration_test() {
+        let (mut world, mut update_stage, entity_id) = setup_world(
+            Velocity::default(),
+            Acceleration { val: Vec3::new(0.0, 7.0, 0.0) },
+        );
+
+        update_stage.add_system(kinematics.system());
+        update_stage.run(&mut world);
+
+        assert_eq!(
+            world.get::<Velocity>(entity_id).unwrap().val.y, 
+            7.0 * PHYSICS_TICK
+        );
+        assert_eq!(
+            world.get::<Transform>(entity_id).unwrap().translation.y, 
+            7.0 * PHYSICS_TICK * PHYSICS_TICK
+        );
     }
 }
